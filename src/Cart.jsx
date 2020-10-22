@@ -4,7 +4,8 @@ import useFetchAll from "./services/useFetchAll";
 import Spinner from "./Spinner";
 
 export default function Cart({ cart, updateQuantity }) {
-  const urls = cart.map((i) => `products/${i.id}`);
+  const urls = cart.map((i) => `products/${i.id}`); //every time the cart renders the urls array will be created & used to fetch the items to the cart
+  // console.log(urls); //["products/1"] or ["products/1","products/2"]
   const { data: products, loading, error } = useFetchAll(urls);
   const navigate = useNavigate();
 

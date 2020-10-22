@@ -4,7 +4,8 @@ import Footer from "./Footer";
 import Header from "./Header";
 import Products from "./Products";
 import Cart from './Cart';
-import Detail from './Detail'
+import Detail from './Detail';
+// import Detail from './DetailRefs';
 import {Routes, Route} from 'react-router-dom'; 
 import { useEffect } from "react";
 import Checkout from "./Checkout";
