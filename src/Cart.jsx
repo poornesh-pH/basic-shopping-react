@@ -2,15 +2,18 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import useFetchAll from "./services/useFetchAll";
 import Spinner from "./Spinner";
+import { useCart } from "./services/cartContext";
 
-export default function Cart({ cart, dispatch }) {
-  const urls = cart.map((i) => `products/${i.id}`); //every time the cart renders the urls array will be created & used to fetch the items to the cart
-  // console.log(urls); //["products/1"] or ["products/1","products/2"]
+export default function Cart() {
+//const {cart, dispatch} = useContext(CartContext)  //? consuming data without custom hook
+  const { cart, dispatch } = useCart();             //? custom hook (no need to import useContext to consume data)
+  const urls = cart.map((i) => `products/${i.id}`); //? every time the cart renders the urls array will be created & used to fetch the items to the cart
+  //* console.log(urls); => ["products/1"] or ["products/1","products/2"]
   const { data: products, loading, error } = useFetchAll(urls);
   const navigate = useNavigate();
 
   function renderItem(itemInCart) {
-    const { id, sku, quantity } = itemInCart;
+    const { id, sku, quantity } = itemInCart; 
     const { price, name, image, skus } = products.find(
       (p) => p.id === parseInt(id)
     );
@@ -26,11 +29,13 @@ export default function Cart({ cart, dispatch }) {
           <p>
             <select
               aria-label={`Select quantity for ${name} size ${size}`}
-              onChange={(e) => dispatch({
-                type:"updateQuantity",
-                sku,
-                quantity:parseInt(e.target.value)}
-                )}
+              onChange={(e) =>
+                dispatch({
+                  type: "updateQuantity",
+                  sku,
+                  quantity: parseInt(e.target.value),
+                })
+              }
               value={quantity}
             >
               <option value="0">Remove</option>
@@ -52,20 +57,16 @@ export default function Cart({ cart, dispatch }) {
 
   return (
     <section id="cart">
-      {/* {
-            cart.length!==0 ? <>
-                <h1>Cart</h1>
-                <ul>{cart.map(renderItem)}</ul> 
-                   </>
-            : <h1>Cart is Empty</h1>  } */}
-
-      <h1>
-        {numInCart === 0
-          ? "Cart is empty"
-          : `Cart(${numInCart})`}
-      </h1>
+      <h1>{numInCart === 0 ? "Cart is empty" : `Cart(${numInCart})`}</h1>
       <ul>{cart.map(renderItem)}</ul>
-    {cart.length>0 && <button className="btn btn-primary" onClick={()=>navigate("/checkout")}>Checkout</button>}
+      {cart.length > 0 && (
+        <button
+          className="btn btn-primary"
+          onClick={() => navigate("/checkout")}
+        >
+          Checkout
+        </button>
+      )}
     </section>
   );
 }
