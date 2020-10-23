@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import useFetch from "./services/useFetch";
 import Spinner from "./Spinner";
-export default function Detail(props) {
+import { useCart } from './services/cartContext';
+
+export default function Detail() {
+  const {dispatch} = useCart();
   const { id } = useParams();
   const [sku, setSku] = useState(""); 
   const navigate = useNavigate();
@@ -11,7 +14,7 @@ export default function Detail(props) {
 
   if (loading) return <Spinner />;
   if (error) return <h1>Item not exists!</h1>;
-
+  
   // TODO: Display these products details
   return (
     <div id="detail">
@@ -28,7 +31,7 @@ export default function Detail(props) {
       </select>
       <p>
         <button className="btn btn-primary" disabled={!sku} onClick={() => {
-          props.dispatch({type:"addItems",id,sku});
+          dispatch({type:"addItems",id,sku});
           navigate("/cart");}}>
           Add to Cart
         </button>

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { saveShippingAddress } from "./services/shippingService";
+import {useCart} from './services/cartContext'
 
 const STATUS = {
   IDLE: "IDLE",
@@ -8,13 +9,15 @@ const STATUS = {
   COMPLETED: "COMPLETED",
 };
 
-// Declaring outside component to avoid recreation on each render
+//? Declaring outside component to avoid recreation on each render
 const emptyAddress = {
   city: "",
   country: "",
 };
 
-export default function Checkout({ cart, dispatch }) {
+
+export default function Checkout() {
+  const {dispatch} = useCart();
   const [address, setAddress] = useState(emptyAddress);
   const [status, setStatus] = useState(STATUS.IDLE);
   const [saveError, setSaveError] = useState(null);
